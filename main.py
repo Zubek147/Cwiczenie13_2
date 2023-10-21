@@ -7,6 +7,8 @@
 # -Tabela "Organizer" z listą pozycji do zrobienia>>
 # -Tabela "List_off_things_to_do" lista poszczególnych czynności do wykonania przypisanych do konkretnych pozycji z tabeli "Organizer" 
 
+# Dodani pozycji do tabeli "Organizer"
+
 import sqlite3
 from sqlite3 import Error
 
@@ -37,6 +39,20 @@ def execute_sql(conn, sql):
         c.execute(sql)
     except Error as e:
         print(e)
+
+def add_project(conn, task):
+    """
+    Create a new task into the organizer table
+    :param conn:
+    :param task:
+    :return: project id
+    """
+    sql = '''INSERT INTO organizer(nazwa, start_date, end_date)
+             VALUES(?, ?, ?)'''
+    cur = conn.cursor()
+    cur.execute(sql, task)
+    conn.commit()
+    return cur.lastrowid
 
 if __name__ == '__main__':
 
@@ -71,3 +87,30 @@ if __name__ == '__main__':
         execute_sql(conn, create_organizer_sql)
         execute_sql(conn, create_list_off_things_to_do_sql)
         conn.close()
+
+    task = (
+        "Praca",
+        "2023-10-23 07:00:00",
+        "2023-10-23 15:00:00"
+        )
+    task2 = (
+        "Nauka z Kodillą",
+        "2023-10-23 21:00:00",
+        "2023-10-23 24:00:00"
+        )
+    task3 = (
+        "Dom",
+        "2023-10-23 15:30:00",
+        "2023-10-23 18:30:00"
+        )
+    task4 = (
+        "Trening",
+        "2023-10-23 18:30:00",
+        "2023-10-23 20:00:00"
+        )
+
+    conn = create_connection("Cwiczenie13_2_database.db")
+    pr_id = add_project(conn, task)
+    pr_id = add_project(conn, task2)
+    pr_id = add_project(conn, task3)
+    pr_id = add_project(conn, task4)
