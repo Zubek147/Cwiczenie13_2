@@ -11,6 +11,8 @@
 
 # Dodanie pozycji do tabeli "List_off_things_to_do"
 
+# Dodanie funkcji wyboru Duties z "List_off_things_to_do" według statusu wykonania
+
 
 import sqlite3
 from sqlite3 import Error
@@ -70,6 +72,19 @@ def add_dutie(conn, dutie):
     cur.execute(sql, dutie)
     conn.commit()
     return cur.lastrowid
+
+def select_duties_by_status(conn, status):
+    """
+    Query list_off_things_to_do by priority
+    :param conn: the Connection object
+    :param status:
+    :return:
+    """
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM list_off_things_to_do WHERE status=?", (status,))
+
+    rows = cur.fetchall()
+    return rows
 
 if __name__ == '__main__':
 
@@ -254,3 +269,8 @@ if __name__ == '__main__':
     dutie_id = add_dutie(conn, dutie11)
     print(pr_id, dutie_id)
     conn.commit()
+
+    #Wybierz obowiązki z List_off_things_to_do według statusu
+    results = select_duties_by_status(conn, "list_off_things_to_do")
+    for row in results:
+        print(row)
