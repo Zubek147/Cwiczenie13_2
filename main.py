@@ -13,6 +13,9 @@
 
 # Dodanie funkcji wyboru Duties z "List_off_things_to_do" według statusu wykonania
 
+# Dodanie funkcji wyboru select all i select where
+
+# Dodanie funkcji delte where i delete all
 
 import sqlite3
 from sqlite3 import Error
@@ -141,6 +144,39 @@ def update(conn, table, id, **kwargs):
    except sqlite3.OperationalError as e:
        print(e)
 
+def delete_where(conn, table, **kwargs):
+   """
+   Delete from table where attributes from
+   :param conn:  Connection to the SQLite database
+   :param table: table name
+   :param kwargs: dict of attributes and values
+   :return:
+   """
+   qs = []
+   values = tuple()
+   for k, v in kwargs.items():
+       qs.append(f"{k}=?")
+       values += (v,)
+   q = " AND ".join(qs)
+
+   sql = f'DELETE FROM {table} WHERE {q}'
+   cur = conn.cursor()
+   cur.execute(sql, values)
+   conn.commit()
+   print("Deleted")
+
+def delete_all(conn, table):
+   """
+   Delete all rows from table
+   :param conn: Connection to the SQLite database
+   :param table: table name
+   :return:
+   """
+   sql = f'DELETE FROM {table}'
+   cur = conn.cursor()
+   cur.execute(sql)
+   conn.commit()
+   print("Deleted")
 
 if __name__ == '__main__':
 
@@ -353,3 +389,9 @@ if __name__ == '__main__':
     results = select_where(conn, "list_off_things_to_do", status = "ended")
     for row in results:
         print(row)
+
+    # Usuń Wybraną pozycję z tabeli list_off_things_to_do
+    delete_where(conn, "list_off_things_to_do", id = 8)
+
+    # Usuń wszysytkie pozycje w tabeli list_off_things_to_do
+    delete_all(conn, "list_off_things_to_do")
