@@ -7,7 +7,10 @@
 # -Tabela "Organizer" z listą pozycji do zrobienia>>
 # -Tabela "List_off_things_to_do" lista poszczególnych czynności do wykonania przypisanych do konkretnych pozycji z tabeli "Organizer" 
 
-# Dodani pozycji do tabeli "Organizer"
+# Dodanie pozycji do tabeli "Organizer"
+
+# Dodanie pozycji do tabeli "List_off_things_to_do"
+
 
 import sqlite3
 from sqlite3 import Error
@@ -51,6 +54,20 @@ def add_project(conn, task):
              VALUES(?, ?, ?)'''
     cur = conn.cursor()
     cur.execute(sql, task)
+    conn.commit()
+    return cur.lastrowid
+
+def add_dutie(conn, dutie):
+    """
+    Create a new dutie into the list_off_things_to_do table
+    :param conn:
+    :param dutie:
+    :return: dutie id
+    """
+    sql = '''INSERT INTO list_off_things_to_do(projekt_id, nazwa, opis, status, start_date, end_date)
+             VALUES(?, ?, ?, ?, ?, ?)'''
+    cur = conn.cursor()
+    cur.execute(sql, dutie)
     conn.commit()
     return cur.lastrowid
 
@@ -114,3 +131,126 @@ if __name__ == '__main__':
     pr_id = add_project(conn, task2)
     pr_id = add_project(conn, task3)
     pr_id = add_project(conn, task4)
+    
+    dutie = (
+        1,
+        "Próba szczelności gazociągu",
+        "Zdjęcie próby szczelności z gazociągu w Dobrzyniewo Duże, ul. Jarzębinowa`",
+        "started",
+        "2023-10-23 09:00:00",
+        "2023-10-23 09:30:00"
+    )
+    
+    dutie1 = (
+        1,
+        "Wizyta w Urzędzie miasta Choroszcz",
+        "Odbiór projektu tymczasowej organizacji ruchu",
+        "started",
+        "2023-10-23 10:30:00",
+        "2023-10-23 10:45:00"
+    )
+    
+    dutie2 = (
+        1,
+        "Dokumentacja odbiorowa",
+        "Przygotowanie protokołów technicznych i końcowych na Dobrzyniewo Duże, ul. Jarzębinowa`",
+        "started",
+        "2023-10-23 12:00:00",
+        "2023-10-23 15:00:00"
+    )
+    
+    dutie3 = (
+        2,
+        "Moduł 13",
+        "Skonczyć moduł 13",
+        "started",
+        "2023-10-23 20:00:00",
+        "2023-10-23 21:30:00"
+    )
+    
+    dutie4 = (
+        2,
+        "Moduł 14",
+        "Zaliczyć moduł 14",
+        "started",
+        "2023-10-23 21:30:00",
+        "2023-10-23 23:00:00"
+    )
+    
+    dutie5 = (
+        2,
+        "Powtórka",
+        "Powtórzyć materiał, który dzisiaj przysfoiłem",
+        "started",
+        "2023-10-23 23:00:00",
+        "2023-10-23 24:00:00"
+    )
+    
+    dutie6 = (
+        3,
+        "Obiad",
+        "Przygotować smaczny obiad dla całej rodziny",
+        "started",
+        "2023-10-23 15:30:00",
+        "2023-10-23 16:30:00"
+    )
+    
+    dutie7 = (
+        3,
+        "Zabawa",
+        "Wykorzystać czas na zabawę z Tymkiem",
+        "started",
+        "2023-10-23 16:30:00",
+        "2023-10-23 18:30:00"
+    )
+    
+    dutie8 = (
+        4,
+        "Pompki",
+        "Wykonać tradycyjne pompki 4 x 25",
+        "started",
+        "2023-10-23 18:30:00",
+        "2023-10-23 18:45:00"
+    )
+    
+    dutie9 = (
+        4,
+        "Przysiady",
+        "Wykonać tradycyjne przysiady 4 x 25",
+        "started",
+        "2023-10-23 18:45:00",
+        "2023-10-23 19:00:00"
+    )
+    
+    dutie10 = (
+        4,
+        "Wyciskanie",
+        "Wykonać tradycyjne wyciskanie leżąc 4 x 25",
+        "started",
+        "2023-10-23 19:00:00",
+        "2023-10-23 19:15:00"
+    )
+    
+    dutie11 = (
+        4,
+        "Biceps",
+        "Wykonać tradycyjne uginanie przedramion 4 x 25",
+        "started",
+        "2023-10-23 19:15:00",
+        "2023-10-23 19:30:00"
+    )
+    
+    dutie_id = add_dutie(conn, dutie)
+    dutie_id = add_dutie(conn, dutie1)
+    dutie_id = add_dutie(conn, dutie2)
+    dutie_id = add_dutie(conn, dutie3)
+    dutie_id = add_dutie(conn, dutie4)
+    dutie_id = add_dutie(conn, dutie5)
+    dutie_id = add_dutie(conn, dutie6)
+    dutie_id = add_dutie(conn, dutie7)
+    dutie_id = add_dutie(conn, dutie8)
+    dutie_id = add_dutie(conn, dutie9)
+    dutie_id = add_dutie(conn, dutie10)
+    dutie_id = add_dutie(conn, dutie11)
+    print(pr_id, dutie_id)
+    conn.commit()
